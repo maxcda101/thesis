@@ -3,6 +3,7 @@ package jobs;
 import models.Data;
 import models.DataOneHour;
 import models.DataTransfer;
+import play.Logger;
 import play.db.jpa.JPA;
 import play.jobs.Every;
 import play.jobs.Job;
@@ -17,11 +18,12 @@ import java.util.List;
 /**
  * Created by AnhQuan on 8/11/2016.
  */
-@On("0 0 0 01 * *")//every hour h:01:ss
+@On("0 0 0 01 * ?")//every hour h:01:ss
 public class TransferOneHour extends Job{
 
     @Override
     public void doJob(){
+        Logger.info("doJob: ",formatDate(new Date()));
         Date date;
         String timeOld,timeNew;
         Long time;
