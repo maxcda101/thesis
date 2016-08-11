@@ -28,7 +28,7 @@ public class TransferDB extends Job {
         query = em.createNativeQuery("SELECT Distinct node_id FROM Data");
         List<Number> listNode = (List<Number>) query.getResultList();
 
-        for (Number i : listSensor) {
+        for (Number i : listNode) {
             Long idNode = i.longValue();
             for (Number j : listSensor) {
                 Long idSensor = j.longValue();

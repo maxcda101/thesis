@@ -25,36 +25,34 @@ public class TransferOneHour extends Job{
     public void doJob(){
         Logger.info("doJob ONE HOUR: ",formatDate(new Date()));
         Date date;
-        String timeOld,timeNew;
+        String timeOld, timeNew;
         Long time;
-        date=new Date();
-        timeNew=formatDate(date);
-        time=date.getTime()-1000*3600;
-        date=new Date(time);
-        timeOld=formatDate(date);
+        date = new Date();
+        timeNew = formatDate(date);
+        time = date.getTime() - 1000 * 3600;
+        date = new Date(time);
+        timeOld = formatDate(date);
 
         //  Data.find()
         EntityManager em = JPA.em();
-        Query query= em.createNativeQuery("SELECT distinct sensor_id FROM DataTransfer where '"+timeOld+"' < time and time < ?");
-        query.setParameter(1, new Date(), TemporalType.DATE);
+        Query query = em.createNativeQuery("SELECT distinct sensor_id FROM DataTransfer where '" + timeOld + "' < time and time < '" + timeNew + "'");
+        List<Number> listSensor = (List<Number>) query.getResultList();
 
-        List<Number> listSensor=(List<Number>)query.getResultList();
-        //Long a= listSensor.get(1);
-        query=em.createNativeQuery("SELECT Distinct node_id FROM DataTransfer where '"+timeOld+"' <time and time < ?");
-        query.setParameter(1, new Date(), TemporalType.DATE);
+        query = em.createNativeQuery("SELECT Distinct node_id FROM DataTransfer where '" + timeOld + "' < time and time < '" + timeNew + "'");
+        List<Number> listNode = (List<Number>) query.getResultList();
 
-        List<Number> listNode=(List<Number>)query.getResultList();
-
-        for(Number i:listSensor){
-            Long idNode=i.longValue();
-            for(Number j:listSensor){
-                Long idSensor=j.longValue();
-
-                query=em.createNativeQuery("SELECT * FROM DataTransfer where node_id=:idNode and sensor_id=:idSensor :timeOld<time and time <:timeNew");
-            //    query.setParameter(idNode,idNode)
-                List<DataTransfer> listData=DataTransfer.find("byNode_idAndSensor_id",idNode,idSensor).fetch();
-                DataOneHour dataOneHour=new DataOneHour(calculateMedium(listData),idNode,idSensor);
-                dataOneHour.save();
+        for (Number i : listNode) {
+            Long idNode = i.longValue();
+            for (Number j : listSensor) {
+                Long idSensor = j.longValue();
+                query = em.createNativeQuery("SELECT * FROM DataTransfer where node_id=" + idNode + " and sensor_id=" + idSensor + " and '" + timeOld + "' < time and time < '" + timeNew + "'",DataTransfer.class);
+                List<DataTransfer> listData =(List<DataTransfer> ) query.getResultList();
+                // renderJSON(listData.get(0));
+                float value = calculateMedium(listData);
+                if (value != 0) {
+                    DataOneHour dataOneHour = new DataOneHour(value, idNode, idSensor);
+                    dataOneHour.save();
+                }
             }
         }
     }
