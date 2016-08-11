@@ -73,8 +73,8 @@ public class Api extends Controller {
     public static void test(){
       //  String sql=;
         EntityManager em = JPA.em();
-        Query query= em.createNativeQuery("SELECT distinct sensor_id FROM DataTransfer where '"+"2016:08:11 17:20:00"+"' < time and time < ?");
-        query.setParameter(1, new Date(), TemporalType.DATE);
+        Query query= em.createNativeQuery("SELECT distinct sensor_id FROM Data where '"+"2016:08:11 17:20:00"+"' < time and time < :timeOld");
+        query.setParameter("timeOld",new Date(),TemporalType.DATE);
         renderJSON(query.getResultList());
     }
 

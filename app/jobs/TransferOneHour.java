@@ -23,7 +23,7 @@ public class TransferOneHour extends Job{
 
     @Override
     public void doJob(){
-        Logger.info("doJob: ",formatDate(new Date()));
+        Logger.info("doJob ONE HOUR: ",formatDate(new Date()));
         Date date;
         String timeOld,timeNew;
         Long time;
