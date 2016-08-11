@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by AnhQuan on 8/11/2016.
  */
-@Every("180s")
+@Every("3mn")//3 phut
 public class TransferDB extends Job {
     @Override
     public void doJob(){
@@ -36,7 +36,7 @@ public class TransferDB extends Job {
         }
     }
 
-    private static float calculateMedium(List<Data> list){
+    private float calculateMedium(List<Data> list){
         float value=0;
         for(Data data:list){
             value+=data.value;

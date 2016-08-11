@@ -13,6 +13,7 @@ import play.mvc.Http;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -71,8 +72,10 @@ public class Api extends Controller {
     }
     public static void test(){
       //  String sql=;
-
-        renderJSON("ok");
+        EntityManager em = JPA.em();
+        Query query= em.createNativeQuery("SELECT distinct sensor_id FROM DataTransfer where '"+"2016:08:11 17:20:00"+"' < time and time < ?");
+        query.setParameter(1, new Date(), TemporalType.DATE);
+        renderJSON(query.getResultList());
     }
 
 }
