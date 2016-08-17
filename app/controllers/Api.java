@@ -85,4 +85,6 @@ public class Api extends Controller {
         renderJSON(DataOneHour.getDataByDay(day,month,year));
     }
 
+
+
 }

@@ -28,14 +28,15 @@ public class DataOneHour extends Model {
         this.node = Node.findById(node);
         this.sensor = Sensor.findById(sensor);
     }
-    public static List<DataOneHour> getDataByDay( int day, int month, int year){
+    public static List<DataOneHour> getDataByDay( int day, int month, int year, Long idSensor){
         String first=year+"-"+month+"-"+day;
         String last=year+"-"+month+"-"+(day+1);
 
         EntityManager em = JPA.em();
-        String sql="SELECT * FROM DataOneHour where '"+first+"' <time and time < '"+last+"'";
+        String sql="SELECT * FROM DataOneHour where '"+first+"' <time and time < '"+last+"' and sensor_id="+idSensor;
         Query query = em.createNativeQuery(sql,DataOneHour.class);
         List<DataOneHour> result = (List<DataOneHour>) query.getResultList();
         return result;
     }
+
 }

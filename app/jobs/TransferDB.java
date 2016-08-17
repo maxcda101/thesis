@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * Created by AnhQuan on 8/11/2016.
  */
-@Every("3mn")//3 phut
+@Every("5mn")//3 phut
 public class TransferDB extends Job {
     @Override
     public void doJob() {
         //  Data.find()
-        Logger.info("doJob 3 Phut: ");
+        Logger.info("doJob 5 Phut: ");
         EntityManager em = JPA.em();
         Query query = em.createNativeQuery("SELECT distinct sensor_id FROM Data");
         List<Number> listSensor = (List<Number>) query.getResultList();
