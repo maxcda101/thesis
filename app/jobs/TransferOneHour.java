@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by AnhQuan on 8/11/2016.
  */
-@On("0 08 * * * ?")//every hour h:01:ss
+@On("0 00 * * * ?")//every hour h:00:00
 public class TransferOneHour extends Job{
 
     @Override

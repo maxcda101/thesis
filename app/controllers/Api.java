@@ -78,5 +78,11 @@ public class Api extends Controller {
 
         renderJSON("ok");
     }
+    public static void getDataByDay(int day, int month, int year){
+        if(day==0||month==0||year==0){
+            renderJSON("Date format exception");
+        }
+        renderJSON(DataOneHour.getDataByDay(day,month,year));
+    }
 
 }
