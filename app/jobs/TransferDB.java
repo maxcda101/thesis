@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by AnhQuan on 8/11/2016.
  */
-@Every("5mn")//3 phut
+@Every("5mn")//5 phut
 public class TransferDB extends Job {
     @Override
     public void doJob() {
