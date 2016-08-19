@@ -8,6 +8,8 @@ import play.Logger;
 import play.data.validation.Required;
 import play.db.jpa.JPA;
 import play.mvc.Controller;
+import ultis.Data;
+import ultis.DataNow;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -44,9 +46,9 @@ public class Apiv1 extends Controller {
                 total += ((DataTransfer) query.getSingleResult()).value;
                 i++;
             }
-            result+="\""+sensor.name+"\":"+total/i+",";
+            result += "\"" + sensor.name + "\":" + total / i + ",";
         }
-        result=result.substring(0,result.length()-1);
+        result = result.substring(0, result.length() - 1);
         result += "}";
         renderJSON(result);
     }
@@ -63,14 +65,23 @@ public class Apiv1 extends Controller {
         renderJSON(value);
     }
 
-    public static void getDataNodeBySensorNow(@Required Long idLocation, @Required Long idSensor) {
+    public static void getDataNodeBySensorNow(@Required Long idLocation) {
         EntityManager em = JPA.em();
         List<Node> listNode = Node.getAllNodeByLocation(idLocation);
-        List<Object> listData = new ArrayList<Object>();
+        List<Sensor> listSensor = Sensor.getSensors(0, 10);
+
+        List<DataNow> listData = new ArrayList<DataNow>();
         for (Node node : listNode) {
-            String sql = "SELECT * FROM DataTransfer WHERE node_id=" + node.id + " and sensor_id=" + idSensor + " order by time desc limit 1";
-            Query query = em.createNativeQuery(sql, DataTransfer.class);
-            listData.add(query.getSingleResult());
+            DataNow dataNow=new DataNow();
+            dataNow.setNode(node);
+            for (Sensor sensor : listSensor) {
+                String sql = "SELECT * FROM DataTransfer WHERE node_id=" + node.id + " and sensor_id=" + sensor.id + " order by time desc limit 1";
+                Query query = em.createNativeQuery(sql, DataTransfer.class);
+                DataTransfer dataTransfer = (DataTransfer) query.getSingleResult();
+                Data data=new Data(sensor, dataTransfer.value);
+                dataNow.addData(data);
+            }
+            listData.add(dataNow);
         }
         renderJSON(listData);
     }
