@@ -33,7 +33,7 @@ public class DataOneHour extends Model {
         String last=year+"-"+month+"-"+(day+1);
 
         EntityManager em = JPA.em();
-        String sql="SELECT * FROM DataOneHour where '"+first+"' <time and time < '"+last+"' and sensor_id="+idSensor;
+        String sql="SELECT * FROM DataOneHour where '"+first+"' <time and time < '"+last+"' and sensor_id="+idSensor +" and node_id=1";
         Query query = em.createNativeQuery(sql,DataOneHour.class);
         List<DataOneHour> result = (List<DataOneHour>) query.getResultList();
         return result;
